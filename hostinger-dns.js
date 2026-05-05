@@ -25,7 +25,7 @@ function sleep(ms) {
 }
 
 function normalizeTxtValue(value) {
-    returnString(value).replace(/^"+|"+$/g, "");
+  return String(value).replace(/^"+|"+$/g, "");
 }
 
 function buildAcmeRecordName(certbotDomain) {
@@ -125,13 +125,12 @@ async function removeTxtRecord(recordName, validationValue) {
         return;
     }
 
-    const normalizedValidation = normalizeTxtValue(validationValue);
-
     const remainingRecords = target.records
-        .filter((record) => normalizeTxtValue(record.content) !== normalizedValidation)
-        .map((record) => ({ content: normalizeTxtValue(record.content) }));
+      .filter((record) => normalizeTxtValue(record.content) !== normalizeTxtValue(validationValue))
+      .map((record) => ({ content: normalizeTxtValue(record.content) }));
 
     if (remainingRecords.length > 0) {
+
         await hostingerRequest(`/api/dns/v1/zones/${HOSTINGER_ZONE_DOMAIN}`, {
             method: "PUT",
             body: JSON.stringify({
